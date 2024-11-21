@@ -19,9 +19,6 @@ November 21 2024 - Unofficial Draft v.0.1
 
 - Issues: <https://github.com/dime-coin/dimedid-method/issues>
 
-<br>
-<br>
-
 ## Contents
 
 - [ABSTRACT](https://github.com/dime-coin/dimedid-method/blob/main/README.md#1-abstract)
@@ -87,9 +84,6 @@ As well as sections marked as non-normative, all authoring guidelines, diagrams,
 
 The key words MAY, MUST, and SHOULD in this document are to be interpreted as described in [BCP 14](https://datatracker.ietf.org/doc/html/bcp14) [RFC2119](https://www.rfc-editor.org/rfc/rfc2119) [RFC8174](https://www.rfc-editor.org/rfc/rfc8174) when, and only when, they appear in all capitals, as shown here.
 
-<br>
-<br>
-
 ---
 
 ## 2. Introduction
@@ -101,13 +95,9 @@ This document aims to define a DID method for the issuance and management of Dec
 - Leveraging Existing Digital Signatures: The digital signatures inherent in blockchain transactions are leveraged for the DID authorization system. This supports a hierarchical public key infrastructure, establishing governance and hierarchical authorization over DID issuance when governance or control over DIDs on a public blockchain is required.
 - Programmable Multi-Party Authorization: The programmable nature of blockchain transactions allows for easy implementation of multi-party authorization schemes. For example, enabling either a DID Controller or a DID Subject to destroy a DID using a 1-of-2 multi-signature scheme within a transaction locking script.
 
-<br>
-
 ### 2.2 Intended audience
 
 This specification is intended for software implementers that want to adopt this method for the creation and verification of Decentralized Identifiers. The implementation of this method was chosen to be on the Dimecoin Blockchain due to its low transaction fees, high throughput, and near instant transaction verification. But it is understood that it can be implemented in any UTXO-based blockchain. These specifications assume a basic understanding of programming and blockchain technology.
-
-<br>
 
 ### 2.3 Scope
 
@@ -118,27 +108,19 @@ The specifications include:
 
 This design enables the verification of DID status to be conducted independently from the DID issuer and the DID Manager, enhancing user privacy. Since the DID issuer and the DID Manager are not aware of the verification checks being performed, users can confirm the status of their DIDs without disclosing their actions to these entities. This increases privacy during the verification process. Furthermore, this method is universally applicable across different UTXO-based blockchain networks, including Dimecoin, making it a versatile and flexible solution for decentralized identity management.
 
-<br>
-
 ### 2.4 Compliance
 
 Our implementation of the DID method can appropriately handle and enforce the issuance, status check destruction, and verification status of the DID and DID Document in accordance with the specifications presented by the [W3C](https://www.w3.org/TR/did-core/#sotd), and the [DIF](https://decentralized-id.com/) .
 
-<br>
-
 ### 2.5 Terminology
 
 [Please review terminology here](https://github.com/dime-coin/dimedid-method/blob/main/Terminology.md).
-
-<br>
-<br>
 
 ---
 
 ## 3. Specification Overview
 
 _THIS SECTION IS NOT NORMATIVE_
-<br>
 
 ### 3.1 Prerequisites
 
@@ -157,15 +139,11 @@ Similarly, the DID Document must fulfill the following criteria:
   - One or more services associated with the DID Subject.
   - Additional metadata such as digital signatures, timestamps, and other cryptographic proofs.
 
-<br>
-
 ### 3.2 UTXO DID Method
 
 In this section we present an overview of the DID method. Our proposal introduces a new Decentralized Identifier (DID) method that links a UTXO and the DID with the public key of the subject and manages the DID status and destruction through transaction spending checks. We use the DIME Blockchain as the verifiable data registry.
 
 The UTXO DID method uses the following method name: **dime**
-
-<br>
 
 #### 3.2.1 The DID
 
@@ -179,12 +157,9 @@ DID:example:123456789abcdefghi
 
 Where fields are broken down as follows:
 
-| Scheme | DID Method | DID Method- Specific Identifier |
+| Scheme | DID Method | DID Method - Specific Identifier |
 |----------|--------------|-----------------------------|
 | DID:     | example:     | 123456789abcdefghi          |
-
-<br>
-<br>
 
 _2. Representation of a DID using UTXO method_
 
@@ -199,8 +174,6 @@ Where fields are broken down as follows:
 | DID:     | Blockchian     | TXID                      |
 | did:     | dime:     | 21f2dae26817752b8f92c51a49a898e287ad133a4e7ed64b4909f7b62f0bbb6e|
 
-<br>
-
 #### 3.2.2 The DID Document
 
 The DID Document is published via a subsequent transaction **Tx1** that spends the output of **Tx0**. The relationship between the DID, the DID document, and the blockchain transactions is given in Figure 1.  The transaction **Tx1** contains a single input and a single output. The output contains the locking script, the DID Document and the funds covering the mining fee of the next transaction. **Tx1** spending the output of **Tx0** allows an external observer to conclude that there is a link between both blockchain transactions. The status of **Tx1** output indicates the latest status of the DID Document.
@@ -208,9 +181,6 @@ The DID Document is published via a subsequent transaction **Tx1** that spends t
 ![Figure 1_DID UTXO Status](https://github.com/dime-coin/branding-assets/blob/main/vectors/DIDUtxoStatus.jpg?raw=true)
 
 > _Figure 1: DID UTXO Status_
-
-<br>
-<br>
 
 ##### 3.2.2.1 The DID Document Data Model
 
@@ -235,8 +205,6 @@ Our current implementation uses [W3C DID Document Data Model](https://www.w3.org
   "authentication": [ "did:dime:5909468ac49f960e191faba2dd7da60bd1775ccf59e90b8390c971d04741b710#subject-key" ] 
 ```
 
-<br>
-
 ### 3.3 DID Controller and DID Resolver
 
 #### 3.3.1 DID Controller
@@ -244,8 +212,6 @@ Our current implementation uses [W3C DID Document Data Model](https://www.w3.org
 As described in W3C, the DID Controller is an entity that has the capability to make changes to a DID document. A DID Controller is not a central registration authority, subjects can be identified by multiple DIDs issued by different DID Controllers. Initially the DID Controller is required to create an identity for itself. The process describe here is the same required for an external Subject DID Creation: the DID controller requires an issuance transaction **Tx0’***, locked to its own public key PKC0 and the “subject” public key PKCD. In this case, the subject is the controller itself. The transaction ID of **Tx0’**, **TxID0’** becomes the DID of the Controller. To generate the subsequent transaction that will contain the Controllers DID Document, the controller will sign the transaction using two public keys: PKCD and PKC0, both of which belong to the Controller. **Tx1’** input spends the output of **Tx0’**.
 
 When requested by the subject, the DID Controller issues a new DID by creating and broadcasting two blockchain transactions: an Issuance and DID Document transaction. The issuance transaction, Tx0 is created by the DID Controller and provisioned (funded) by controller. UTXO of **Tx0** should provide enough funds to cover the mining fee for the next transaction.  The transaction ID of **Tx0**, **TxID0** becomes the DID of the Subject. The DID Document is contained in the subsequent transaction **Tx1**, linked to the issuance transaction Tx0 by spending its output. **Tx1** has a single output; that contains a payload with the DID Document and the minimal required funding to cover the mining fee pf the next transaction.
-
-<br>
 
 #### 3.3.2. DID Resolver
 
@@ -264,19 +230,13 @@ The verifier utilizes the method-specific part of the DID identifier to search t
 
 To request the status of a DID, the verifier can use a DID resolver. Verifiers have the option to build and operate their own independent DID resolver, create their own implementation following this specification, or use a service provided by a third party that runs an implementation of the UTXO DID method.
 
-<br>
-
 ![Figure 2_DID Creation](https://github.com/dime-coin/branding-assets/blob/main/vectors/DIDUTXO2.jpg?raw=true)
 
 > _Figure 2: DID Creation_
 
-<br>
-
 ### 3.4 DID Operations
 
 In this section, we will cover CRUD specifications to Create, Read, Update, and Destroy a DID. We included implementation examples as references. Please note that some specifications are optional and serve only to illustrate potential implementations.
-
-<br>
 
 ### 3.4.1 Create
 
@@ -288,39 +248,30 @@ Recall that the DID Controller possesses two keys:
 The Subject has a single key.
 - PKS0. This key is always in possession of the subject.
 
-<br>
-
 **A: TxID0: Issuance Transaction.**
-<br> When a new DID is requested by the subject, the Controller will create an issuance transaction. This transaction locks the output to two public keys: the Controller's public key and the subject's public key. This initial transaction is necessary to initiate the DID Document process. is used in the DID string: **did:dime:TxID0** as the Subject’s DID.
+
+When a new DID is requested by the subject, the Controller will create an issuance transaction. This transaction locks the output to two public keys: the Controller's public key and the subject's public key. This initial transaction is necessary to initiate the DID Document process. is used in the DID string: **did:dime:TxID0** as the Subject’s DID.
 **Tx0** has a single input and a single output. The DID Document is published via a subsequent transaction **Tx** that spends the output of **Tx0**. See Figure 3. Note that when the Controller is required to issue a DID for itself, the Issuance transaction locks the output to both controller’s public keys (PKCD and PKC0). _[See Section 3.3. DID Controller](https://github.com/dime-coin/dimedid-method/blob/main/README.md#33-did-controller-and-did-resolver)_.  
 
-<br>
-
 **B: TxID1: DID Document transaction**
-<br> This is a subsequent transaction that spends the output of the issuance transaction **Tx0**. This transaction has a single input and a single output. This output contains a data payload with the DID Document.  **Tx1** output is locked to a one-of-two multi-sig script signed either by Subject public key or the Controller public key. Once the input of **Tx1** is signed by both keys, the transaction is broadcasted to the network. When validated by miners it will read as resolved by the DID Resolver.
 
-<br>
+This is a subsequent transaction that spends the output of the issuance transaction **Tx0**. This transaction has a single input and a single output. This output contains a data payload with the DID Document.  **Tx1** output is locked to a one-of-two multi-sig script signed either by Subject public key or the Controller public key. Once the input of **Tx1** is signed by both keys, the transaction is broadcasted to the network. When validated by miners it will read as resolved by the DID Resolver.
 
 ![Figure 3_TX Anatomy](https://github.com/dime-coin/branding-assets/blob/main/vectors/TxAnatomy.jpg?raw=true)
 
 > _Figure 3: TX Anatomy_
 
-<br>
-
 ![Figure 4_How the Subject and the Controller keys are link to the DID?](https://github.com/dime-coin/branding-assets/blob/main/vectors/SubjectControllerKeyLink.jpg?raw=true)
 
 > _Figure 4: How the Subject and the Controller keys are link to the DID?_
 
-<br>
+**C: Data payloads in the transaction outputs**
 
-**C: Data payloads in the transaction outputs.**
-<br> After OP_RETURN we can find a data payload. This data does not affect the spending conditions, and it is described below:
+After OP_RETURN we can find a data payload. This data does not affect the spending conditions, and it is described below:
 
 - `DIME-DID` Identifier specifying this is a transaction associated with the DIME-DID Method.
 - `Identity Code` DID Controller configuration identifier.
 - `DID Document JSON DID Document` or type transaction indicator <1/2/3>: Issuance, Update or key rotation, and Destroy respectively.  
-
-<br>
 
 **D: Implementation Example**
 
@@ -328,14 +279,9 @@ Below illustrates a detailed implementation of the DIME-DID Method as a referenc
 - **DID Controller Role:** The DID controller can be run by any entity. It is important to note that the DIME-DID method does not require a centralized controller. Any organization or entity can run a DID controller and create a DID for itself, as specified in _[See Section 3.3. DID Controller](https://github.com/dime-coin/dimedid-method/blob/main/README.md#33-did-controller-and-did-resolver)_.
 - **Database Persistence:** We demonstrate database persistence in this implementation as an example, although this is optional based on implementation preferences
 
-<br>
-
 ![Frame 5_Create DID](https://github.com/dime-coin/branding-assets/blob/main/vectors/createDID.jpg?raw=true)
 
 > _Figure 5: Create DID_
-
-<br>
-<br>
 
 **F: Key Considerations**
 
@@ -348,15 +294,11 @@ Below illustrates a detailed implementation of the DIME-DID Method as a referenc
   - The DID of the Controller (used to identify the DID Controller by resolving their DID).
   - An authentication method for the DID Controller (a public key verifiable through the signature on the input of **Tx1**).
 
-<br>
-
 ### 3.4.2 Resolve
 
 The resolver uses the DID (TxID) to find the transaction in the ledger and identify the linked transactions containing the DID Document. Once the DID Document Tx has been identified the resolver does a status check on the output of the Tx via the DID Resolver. Who will find the TxID given and track UTXO status until the last UTXO update is found.
 
 The DID Resolver can be independently built and operated, implemented according to this specification, or provided by a third party that supports the UTXO-DID method. This method permits the use of different resolvers, ensuring the users are not required to rely on or trust our specific implementation.
-
-<br>
 
 ### 3.4.3 Update
 
@@ -364,13 +306,9 @@ The DID Resolver can be independently built and operated, implemented according 
 
 This section details how to change the content of a DID Document. The DID controller can change or update the status of a DID Document by creating a new transaction that spends the output of most recent transaction referring to the DID Document's status.
 
-<br>
-
 ![Figure 6_Status Update](https://github.com/dime-coin/branding-assets/blob/main/vectors/DIDUtxoStatus2.jpg?raw=true)
 
 > _Figure 6: Status Update_
-
-<br>
 
 #### B: Rotation of Keys
 
@@ -384,26 +322,24 @@ Both subject and controller can initiate rotation of keys. Execution of key rota
 - Controller rotation to update a valid <PKC0> key
 - Controller rotation upon <PKC0> key compromised
 
-<br>
 
 **C: Subject Key Rotation**
-<br> There are multiple reasons why a Subject may need to rotate their key. These reasons may include routine operational practices such as voluntary or scheduled rotations to comply with an organizations policies, security concerns such as key compromise, or the necessity to maintain a valid controller attestation due to the rotation of the controller's key.
+
+There are multiple reasons why a Subject may need to rotate their key. These reasons may include routine operational practices such as voluntary or scheduled rotations to comply with an organizations policies, security concerns such as key compromise, or the necessity to maintain a valid controller attestation due to the rotation of the controller's key.
 
 - **Subject Key’s compromised:**
-<br> If the subject's key has been compromised, it cannot be used to attest rights anymore. As a result, the DID Controller must establish an authentication process for the subject that does not rely on the compromised keys. Once the DID Subject is successfully authenticated through this alternative method, the DID Controller recognizes that the public key **PKS0** has been compromised. The controller then signs a new issuance transaction using its own key **PKC0.**
+
+If the subject's key has been compromised, it cannot be used to attest rights anymore. As a result, the DID Controller must establish an authentication process for the subject that does not rely on the compromised keys. Once the DID Subject is successfully authenticated through this alternative method, the DID Controller recognizes that the public key **PKS0** has been compromised. The controller then signs a new issuance transaction using its own key **PKC0.**
 
 In this process, the output from the transaction referring to the latest DID Document transaction **TXn** becomes the input for a new funding transaction **TXf**. This new transaction locks the output to both the controller's unchanged public key and the subject's new public key. This ensures that future transactions can be securely authorized using the updated keys.
 
 - **Subject Key’s not compromised:**
-<br> In all other cases where the subject's old key remains secure, authentication via an external channel is unnecessary. The DID Subject must use both the old and new keys to attest their authorization for key rotation and to prove ownership of the new key.
 
-<br>
+In all other cases where the subject's old key remains secure, authentication via an external channel is unnecessary. The DID Subject must use both the old and new keys to attest their authorization for key rotation and to prove ownership of the new key.
 
 ![Figure 7_DID Key Rotation](https://github.com/dime-coin/branding-assets/blob/main/vectors/DIDKeyRotation.jpg?raw=true)
 
 > _Figure 7: DID Key Rotation_
-
-<br>
 
 **D: Controller Key Rotation**
 There are multiple reasons a Controller key needs to be rotated: either regular operating reasons like voluntary, scheduled rotation to comply with policies, security reason like any of the Controller keys: PKCD or PKC0 has been compromised. The Controller can lose any of the following keys.
@@ -411,7 +347,6 @@ There are multiple reasons a Controller key needs to be rotated: either regular 
 - `PKC0`: Public Key associated with their DID document, i.e. the Root key for all their DID Issuance.  
 
 Only in the scenario in which the Controller losses his master key **PKCD’**, would require a different process for Key rotation. When changing **PKC0** the Controller will just be able to update the keys themselves.  
-<br>
 
 **E: Compromised PKCD**
 
@@ -425,27 +360,17 @@ Next, a new DID Document for the user is generated, incorporating a new derivati
 
 Finally, the updated DID Document is confirmed to have been successfully created and recorded on the blockchain.
 
-<br>
-
 ![Figure 8_DID Master Key rotation](https://github.com/dime-coin/branding-assets/blob/main/vectors/DIDMasterKeyRotation.jpg?raw=true)
 
 > _* Figure 8: Notification of key rotation of end-user is a user experience decision, configurable and not mandatory. Invalid signatures will be rejected by blockchain_
-
-<br>
-<br>
 
 **F: Compromised PKC0**
 
 When a Controller needs to rotate their Controller Key associated with their DID Document—for instance, to change the root key for all their DID issuances—they will follow the same process depicted within the "loop" of the diagram above. The key difference in this scenario is that the Controller can independently perform the steps to create the Rotation Transaction and publish it on the blockchain. However, they still require the Subject to sign the updated DID Document. To facilitate this, the Controller will create a new Publish Transaction linked to the Rotation Transaction. _See Figure 9._
 
-<br>
-
 ![Figure 9_TX Anatomy](https://github.com/dime-coin/branding-assets/blob/main/vectors/DIDTxAnatomy2.jpg?raw=true)
 
 > _Figure 9: Tx Anatomy_
-
-<br>
-<br>
 
 ### 3.4.4 Destroy
 
@@ -456,21 +381,13 @@ In this section we explain how to destroy a DID. This method uses the spent stat
 
 In all cases the destruction is initiated by the DID Subject.
 
-<br>
-
 ![Figure 10_DID Destruction Initiated by Subject](https://github.com/dime-coin/branding-assets/blob/main/vectors/DestroyDID.jpg?raw=true)
 
 > _Figure 10: DID Destruction initiated by DID Subject_
 
-<br>
-<br>
-
 ![Figure 11_DID Destruction Initiated by Controller](https://github.com/dime-coin/branding-assets/blob/main/vectors/DIDControllerDestroy.jpg?raw=true)
 
 > _Figure 11: DID Destruction initiated by DID Controller_
-
-<br>
-<br>
 
 ---
 
@@ -487,9 +404,6 @@ The UTXO-Based DID Method supports a governance service where the **DID Subject*
 - The trust framework supports a schema of key hierarchies and the issuance of the DID Controller. Once the Controller has been assigned a key, it becomes the master of that key for issuing all DIDs to its DID Subjects.
 
 **DID PKCD = Master key and PKC0 = Controller Key to sign Subject DIDs.** When the Controller signs a new DID Document, they publish their public key to enable authentication of their own DID. For governance verification, the verifier uses the DID to locate the corresponding transaction on the ledger. Once the transaction is found, the verifier reviews the UTXO status and examines the DID Document. To confirm governance, the verifier must ensure that the transaction providing the TxID, which became the Subject's DID, has been co-signed by one of the Controller's published keys.
-
-<br>
-<br>
 
 ---
 
@@ -517,15 +431,12 @@ This approach shifts the responsibility for determining DID security and stabili
 
 The DID Spec Registries should define a new field for where the resolver can signal the number of confirmations for the first DID transaction **Tx0** and the confirmations of the resolved (last by default) DID Document transaction.
 
-<br>
-
 | Confirmations.create    | DID Location    | Guidance of Use|
 |----------|--------------|-----------------------------|
 |0 | Mempool | Still in the mempool; do not rely on it |
 | < 6 | Blockchain | Confirmed recently; handle with moderate care |
 | >= 6 | Blockchain | Confirmed in several blocks; ready for normal use |
 
-<br>
 
 | Confirmations.update    | DID Documentat Location    | Guidance of Use|
 |----------|--------------|-----------------------------|
@@ -533,23 +444,15 @@ The DID Spec Registries should define a new field for where the resolver can si
 | < 6 | Blockchain |Confirmed recently; handle with moderate car |
 | >= 6 | Blockchain | Confirmed in several blocks; ready for normal use |
 
-<br>
-
 ```bash
 "confirmations": {
 - "create": 123,    // confirmations of the initial transaction for the resolved DID
 - "update": 234     // confirmations of the DID Document transaction for the resolved DID}
 ```
 
-<br>
-<br>
-
 For a newly created DID the number of confirmations is highly likely to be the same as both initial transactions are submitted to the dimecoin network together. The update field will signal the confirmations of the resolved DID Document, which by default is the last DID document on the chain, unless resolution of specific DID document version was requested by Version-ID.
 
 The issuers and verifiers can configure number of valid blocks needed to accept a DID as resolved. It could be 0 confirmation requirement to **n** confirmations.
-
-<br>
-<br>
 
 ---
 
@@ -569,8 +472,6 @@ In addition to its speed, Dimecoin boasts near-zero transaction fees, providing 
 
 By applying this solution to the Dimecoin network, we capitalize on its fast transaction confirmations and low fees. This approach not only accelerates the resolution time for newly minted DIDs but also shifts the responsibility for the stability of the DID Document from the DID Resolver to the requester performing the status check. The combination of Dimecoin's speed and cost-efficiency enhances the overall effectiveness of implementing the DID method on this network.
 
-<br>
-
 ### 6.2 Why not others? Ledger Comparison Analysis
 
 - **BTC (Bitcoin)**: While Bitcoin is the most established UTXO-based ledger, its 10-minute block intervals and high average transaction fees make it unsuitable for applications requiring fast and cost-efficient DID operations. The limited transaction throughput of BTC (approximately 7 transactions per second) significantly hampers its scalability for high-volume use cases.
@@ -581,9 +482,6 @@ By applying this solution to the Dimecoin network, we capitalize on its fast tra
 
 Our solution requires high-volume transaction processing at low cost, as well as maintaining data integrity over time and across parties involved. Immutability and alteration records should be enforced by an independent process: the consensus mechanism. Additionally, it does not require the execution of any programmatic function at the block validation level, avoiding execution costs in transaction fees. Lastly in DIME there’s the 'first-seen rule' which means that validators will not accept a double-spend before block publication even for a higher fee if a miner receives a transaction, they verify it is correct, then accept it as valid. This means they will not accept a double-spend of the same input -- then add the transaction in the mempool. It may appear in the next block, or the block after. For these reasons, using the DIME blockchain benefits from its scalability, low cost, and data integrity provided by its hybrid PoW/POS mechanism.
 
-<br>
-<br>
-
 ---
 
 ## 7. Privacy Considerations
@@ -592,14 +490,9 @@ _THIS SECTION IS NOT NORMATIVE_
 
 This section covers security considerations for the UTXO-DID Method. We discuss key storage and protection, usage policies, and security and privacy best practices.
 
-<br>
-
 ### 7.1 Data minimisation and Personal identifiable information best practices
 
 The UTXO-DID Method ensures that no personally identifiable information (PII) is stored, linked, or added to the DID, the DID Document, or the transaction resolving the DID and its associated DID Document. Since the network is public and immutable, any data recorded on the blockchain becomes permanent and cannot be fully removed.
-
-<br>
-<br>
 
 ### 7.2 DID Correlation Risk
 
@@ -608,9 +501,6 @@ There is a potential risk of identities being linked if they are used frequently
 - If a DID is compromised or the user feels uncomfortable with its exposure, the DID Subject can deactivate it by spending the associated output. Since TxIDs linked to DIDs are excluded from the transaction payment process, the only way to associate payments with identities is through Verifiable Credentials (VCs).
 - To address privacy concerns related to transaction linkability in the UTXO-DID Method, users can create an unlimited number of DIDs. This allows for enhanced privacy by using different identities for separate purposes.
 - If you are a verifier and a subject has shared a DID associated with a VC containing personal information, avoid sharing the verification history with other verifiers to safeguard the subject's privacy.
-
-<br>
-<br>
 
 ---
 
@@ -645,9 +535,6 @@ Below text uses the following symbols that refer to SECP256K1 private and public
 
 It also uses term `identityCode`. This is a code that identifies the DID controller that's created by transactions. This code MUST be present, and it **SHOULD** be unique.
 
-<br>
-<br>
-
 ### 8.2.1 DID Issuance Transaction
 
 The DID issuance transaction is structured with a single input and a single output:
@@ -666,9 +553,6 @@ The DID issuance transaction is structured with a single input and a single outp
     - Additional segments MAY be included for implementation-specific purposes.
 
 <img width="687" alt="Screenshot 2024-11-21 at 00 10 44" src="https://github.com/dime-coin/branding-assets/blob/main/vectors/DIDIssuanceTx.jpg?raw=true">
-
-<br>
-<br>
 
 ### 8.2.2 DID Document Transaction
 
@@ -691,9 +575,6 @@ The DID document transaction is funded either by a DID issuance transaction or a
 The transaction ID (TxID) of the DID document transaction serves as the `versionId` of the DID document and can be resolved accordingly.  
 The timestamp of the block containing the DID document transaction serves as the `versionTime` of the DID document and can be resolved accordingly.
 
-<br>
-<br>
-
 ### 8.2.3 DID Destroy Transaction
 
 The DID destruction transaction is funded by the preceding DID document transaction. It has one input that **MUST** spend the UTXO of the previous DID document transaction. This transaction **MUST** have a single output with a value of 0, rendering it unspendable. When present, the DID destruction transaction becomes the final transaction in the DID chain and effectively invalidates the DID.
@@ -708,9 +589,6 @@ The DID destruction transaction is funded by the preceding DID document transact
   - Additional segments **MAY** be added for custom implementation purposes.
 
 <img width="676" alt="Screenshot 2024-11-21 at 00 10 44" src="https://github.com/dime-coin/branding-assets/blob/main/vectors/DIDdestructTx.jpg?raw=true">
-
-<br>
-<br>
 
 ### 8.2.4 DID Funding Transaction
 
@@ -734,9 +612,6 @@ The DID funding transaction does not alter the state of the DID and is solely us
 
 <img width="674" alt="Screenshot 2024-11-21 at 00 10 44" src="https://github.com/dime-coin/branding-assets/blob/main/vectors/DIDFundingTx.jpg?raw=true">
 
-<br>
-<br>
-
 ### 8.2.5 Example of DID Transaction Chain
 
 _THIS SECTION IS NOT NORMATIVE_
@@ -744,9 +619,6 @@ _THIS SECTION IS NOT NORMATIVE_
 Below, the example shows a DID transaction chain for a DID that had one change in the DID Document and then was destroyed.
 
 <img width="711" alt="Screenshot 2024-11-21 at 00 10 44" src="https://github.com/dime-coin/branding-assets/blob/main/vectors/ExDIDTxChain.jpg?raw=true">
-
-<br>
-<br>
 
 ## 8.3 DID Operations
 
@@ -762,7 +634,6 @@ Authorization for performing operations is based on blockchain properties, which
 
 - **DID Relationship:**  
   - The DID Subject's DID Document **MUST** include the DID of its Controller in its listing.  
-
 
 ```json
 {
@@ -785,8 +656,6 @@ Authorization for performing operations is based on blockchain properties, which
     ]
 }
 ```
-
-<br>
 
 In Self-Soverign Identity (SSI) use, the DID document lists both public keys since the DID Controller’s DID does not exist:
 
@@ -830,9 +699,6 @@ In Self-Soverign Identity (SSI) use, the DID document lists both public keys sin
 }
 ```
 
-<br>
-<br>
-
 ## 8.3.1 DID Creation
 
 To create a DID, the DID Controller **MUST** publish two transactions to the blockchain:
@@ -845,9 +711,6 @@ If the DID Subject is acting as its own Controller (Self-Sovereign Identity - SS
 
 - **C0/PKC0** as the keypair representing the DID Controller.  
 - **S0/PKS0** as the keypair representing the DID Subject.
-
-<br>
-<br>
 
 ## 8.3.2 DID Document Updates
 
@@ -863,16 +726,9 @@ The DID Controller is responsible for providing funding for the DID Funding Tran
 
 This ensures mutual agreement between the DID Subject and the DID Controller on the new contents of the DID Document.
 
-
-<br>
-<br>
-
 ## 8.3.3 DID Deactivation
 
 To deactivate, or destroy a DID, either thd DID Subject or DID Controller **MUST** publish a DID destruction transaction (_see A.2.3 DID Destruction Transaction_). The funds for this transaction are already available in the UTXO of the last transaction of the DID’s transaction chain.
-
-<br>
-<br>
 
 ## 8.3.4 DID Resolution
 
@@ -890,9 +746,6 @@ To resolve a DID to the latest version of the DID Document, the DID Resolver **M
    - **3.3 If it is a DID Destruction Transaction**:  
      Return the last observed DID Document as the resolution result, set the `deactivated` property to `true` in the DID Document metadata, and terminate the process.
 
-<br>
-<br>
-
 Note: If a `versionId` query is present, the algorithm **MUST** modify step 3.1 as follows:
 
 - **3.1 If it is a DID Document Transaction:**  
@@ -902,16 +755,10 @@ Note: If a `versionId` query is present, the algorithm **MUST** modify step 3.1 
       - **3.1.1.2.1** If the UTXO is unspent, set the `error` property of the DID resolution metadata to `notFound` and terminate.  
       - **3.1.1.2.2** If the UTXO is spent, designate this transaction as the current transaction and repeat step 2.  
 
-<br>
-<br>
-
 And step 3.3 should read:
 
 - **3.3 If it is a DID destructiont Transaction**
   Set error property of DID resolution metadata to `notFound` and terminate.
-
-<br>
-<br>
 
 ---
 
@@ -924,4 +771,3 @@ And step 3.3 should read:
 | [3] | [Ethr Revocation 2022](https://spherity.github.io/vc-ethr-revocation-registry/)    | An Ethereum, EIP-5539 compliant and registry-based revocation mechanism for Verifiable Credentials Maintainer: Spherity GmbH ([email](mailto:lauritz.leifermann@spherity.com)) ([website](https://www.spherity.com/))| Philipp Bolte, Dennis vo der Bey, Lauritz Leifermann |
 | [4] | [did:btc Method Specification](https://microstrategy.github.io/did-btc-spec/)    | DID:BTC Method Specifcation | Daniel McNally |
 | [5] | [DID Use Cases](https://www.w3.org/TR/did-use-cases/) | w3c Use Cases and Requirements for Decentralized Identifiers | Kim Hamilton-Duffy, Ryan Grant, Adrian Gropper |
-
