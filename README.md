@@ -490,9 +490,9 @@ _THIS SECTION IS NOT NORMATIVE_
 
 This section covers security considerations for the UTXO-DID Method. We discuss key storage and protection, usage policies, and security and privacy best practices.
 
-### 7.1 Data minimisation and Personal identifiable information best practices
+### 7.1 Data Minimisation and Personal Identifiable Information (PII) Best Practices
 
-The UTXO-DID Method ensures that no personally identifiable information (PII) is stored, linked, or added to the DID, the DID Document, or the transaction resolving the DID and its associated DID Document. Since the network is public and immutable, any data recorded on the blockchain becomes permanent and cannot be fully removed.
+The UTXO-DID Method ensures that no Personally Identifiable Information (PII) is stored, linked, or added to the DID, the DID Document, or the transaction resolving the DID and its associated DID Document. Since the network is public and immutable, any data recorded on the blockchain becomes permanent and cannot be fully removed.
 
 ### 7.2 DID Correlation Risk
 
