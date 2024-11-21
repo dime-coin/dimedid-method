@@ -114,7 +114,7 @@ Our implementation of the DID method can appropriately handle and enforce the is
 
 ### 2.5 Terminology
 
-[Please review terminology here](https://github.com/dime-coin/dimedid-method/blob/main/Terminology.md).
+Please review terminology [here](https://github.com/dime-coin/dimedid-method/blob/main/Terminology.md).
 
 ---
 
