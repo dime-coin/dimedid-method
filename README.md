@@ -95,7 +95,7 @@ This document aims to define a DID method for the issuance and management of Dec
 - Leveraging Existing Digital Signatures: The digital signatures inherent in blockchain transactions are leveraged for the DID authorization system. This supports a hierarchical public key infrastructure, establishing governance and hierarchical authorization over DID issuance when governance or control over DIDs on a public blockchain is required.
 - Programmable Multi-Party Authorization: The programmable nature of blockchain transactions allows for easy implementation of multi-party authorization schemes. For example, enabling either a DID Controller or a DID Subject to destroy a DID using a 1-of-2 multi-signature scheme within a transaction locking script.
 
-### 2.2 Intended audience
+### 2.2 Intended Audience
 
 This specification is intended for software implementers that want to adopt this method for the creation and verification of Decentralized Identifiers. The implementation of this method was chosen to be on the Dimecoin Blockchain due to its low transaction fees, high throughput, and near instant transaction verification. But it is understood that it can be implemented in any UTXO-based blockchain. These specifications assume a basic understanding of programming and blockchain technology.
 
@@ -253,7 +253,7 @@ The Subject has a single key.
 When a new DID is requested by the subject, the Controller will create an issuance transaction. This transaction locks the output to two public keys: the Controller's public key and the subject's public key. This initial transaction is necessary to initiate the DID Document process. is used in the DID string: **did:dime:TxID0** as the Subject’s DID.
 **Tx0** has a single input and a single output. The DID Document is published via a subsequent transaction **Tx** that spends the output of **Tx0**. See Figure 3. Note that when the Controller is required to issue a DID for itself, the Issuance transaction locks the output to both controller’s public keys (PKCD and PKC0). _[See Section 3.3. DID Controller](https://github.com/dime-coin/dimedid-method/blob/main/README.md#33-did-controller-and-did-resolver)_.  
 
-**B: TxID1: DID Document transaction**
+**B: TxID1: DID Document Transaction**
 
 This is a subsequent transaction that spends the output of the issuance transaction **Tx0**. This transaction has a single input and a single output. This output contains a data payload with the DID Document.  **Tx1** output is locked to a one-of-two multi-sig script signed either by Subject public key or the Controller public key. Once the input of **Tx1** is signed by both keys, the transaction is broadcasted to the network. When validated by miners it will read as resolved by the DID Resolver.
 
@@ -265,7 +265,7 @@ This is a subsequent transaction that spends the output of the issuance transact
 
 > _Figure 4: How the Subject and the Controller keys are link to the DID?_
 
-**C: Data payloads in the transaction outputs**
+**C: Data Payloads in Transaction Outputs**
 
 After OP_RETURN we can find a data payload. This data does not affect the spending conditions, and it is described below:
 
@@ -314,7 +314,8 @@ This section details how to change the content of a DID Document. The DID contro
 
 Both subject and controller can initiate rotation of keys. Execution of key rotation is dependent upon who is performing the rotation and the reason it is being done. Scheduled or voluntary rotations are different from  forced rotations due to compromised keys.
 
-**Below we listed a series of use cases:**
+**Potential Use Cases:**
+
 - User Key Rotation with Valid Subject's Key
 - User Key Rotation upon Compromised Subject's Key
 - User Key Rotation because controller rotated its <PKC0> N key (user does not know if N was compromised or rotated regularly)
@@ -327,13 +328,13 @@ Both subject and controller can initiate rotation of keys. Execution of key rota
 
 There are multiple reasons why a Subject may need to rotate their key. These reasons may include routine operational practices such as voluntary or scheduled rotations to comply with an organizations policies, security concerns such as key compromise, or the necessity to maintain a valid controller attestation due to the rotation of the controller's key.
 
-- **Subject Key’s compromised:**
+- **Subject Key’s Compromised:**
 
 If the subject's key has been compromised, it cannot be used to attest rights anymore. As a result, the DID Controller must establish an authentication process for the subject that does not rely on the compromised keys. Once the DID Subject is successfully authenticated through this alternative method, the DID Controller recognizes that the public key **PKS0** has been compromised. The controller then signs a new issuance transaction using its own key **PKC0.**
 
 In this process, the output from the transaction referring to the latest DID Document transaction **TXn** becomes the input for a new funding transaction **TXf**. This new transaction locks the output to both the controller's unchanged public key and the subject's new public key. This ensures that future transactions can be securely authorized using the updated keys.
 
-- **Subject Key’s not compromised:**
+- **Subject Key’s not Compromised:**
 
 In all other cases where the subject's old key remains secure, authentication via an external channel is unnecessary. The DID Subject must use both the old and new keys to attest their authorization for key rotation and to prove ownership of the new key.
 
@@ -407,7 +408,7 @@ The UTXO-Based DID Method supports a governance service where the **DID Subject*
 
 ---
 
-## 5.Low latency DID resolution
+## 5. Low Latency DID Resolution
 
 _THIS SECTION IS NOT NORMATIVE_
 
@@ -456,7 +457,7 @@ The issuers and verifiers can configure number of valid blocks needed to accept 
 
 ---
 
-## 6. Data register analysis
+## 6. Data Register Analysis
 
 _THIS SECTION IS NOT NORMATIVE_
 
@@ -472,7 +473,7 @@ In addition to its speed, Dimecoin boasts near-zero transaction fees, providing 
 
 By applying this solution to the Dimecoin network, we capitalize on its fast transaction confirmations and low fees. This approach not only accelerates the resolution time for newly minted DIDs but also shifts the responsibility for the stability of the DID Document from the DID Resolver to the requester performing the status check. The combination of Dimecoin's speed and cost-efficiency enhances the overall effectiveness of implementing the DID method on this network.
 
-### 6.2 Why not others? Ledger Comparison Analysis
+### 6.2 Why Dimecoin? Ledger Comparison Analysis
 
 - **BTC (Bitcoin)**: While Bitcoin is the most established UTXO-based ledger, its 10-minute block intervals and high average transaction fees make it unsuitable for applications requiring fast and cost-efficient DID operations. The limited transaction throughput of BTC (approximately 7 transactions per second) significantly hampers its scalability for high-volume use cases.
 
@@ -762,7 +763,7 @@ And step 3.3 should read:
 
 ---
 
-# 9.References and Credits
+# 9. References and Credits
 
 |   |                            Specification                                           | Description                |     Author(s)      |
 |---|------------------------------------------------------------------------------------|-----------------------------| -------------------- |
